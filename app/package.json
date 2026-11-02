@@ -1,0 +1,7 @@
+{
+  "name": "drehscheibe",
+  "productName": "Drehscheibe",
+  "version": "1.0.0",
+  "description": "Datei-Konverter mit Radialmenue",
+  "main": "main.js"
+}
