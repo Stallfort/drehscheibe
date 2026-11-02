@@ -1,0 +1,33 @@
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pakete bauen
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          sed -i "s/\"version\": \".*\"/\"version\": \"$VERSION\"/" app/package.json
+          echo "{\"version\":\"$VERSION\"}" > version.json
+          (cd app && zip -r ../app.zip .)
+          bash build/pack.sh
+          mv dist/Drehscheibe-Setup.bat dist/Drehscheibe-Setup.zip .
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            app.zip
+            version.json
+            Drehscheibe-Setup.bat
+            Drehscheibe-Setup.zip
